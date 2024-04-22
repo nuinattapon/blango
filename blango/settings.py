@@ -51,11 +51,11 @@ class Dev(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
 
-        'blog',
+        'blog','blango_auth',
 
         'crispy_forms',
         'crispy_bootstrap5',
-        "debug_toolbar",        
+        'debug_toolbar',        
     ]
 
     MIDDLEWARE = [
@@ -232,7 +232,7 @@ class Dev(Configuration):
     }
     
     INTERNAL_IPS = ["192.168.11.179"]
-
+    AUTH_USER_MODEL = "blango_auth.User"
 
 class Prod(Dev):
     DEBUG = False
