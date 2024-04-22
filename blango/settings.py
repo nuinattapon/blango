@@ -149,24 +149,13 @@ class Dev(Configuration):
     CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
     CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-#   LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "handlers": {
-#         "console": {"class": "logging.StreamHandler", "stream": "ext://sys.stdout"},
-#     },
-#     "root": {
-#         "handlers": ["console"],
-#         "level": "DEBUG",
-#     }
-#     }
 
     # LOGGING = {
     #     "version": 1,
     #     "disable_existing_loggers": False,
     #     "formatters": {
     #         "verbose": {
-    #             "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+    #             "format": "{levelname} {asctime} {module} {name}.{funcName} {process:d} {thread:d} {message}",
     #             "style": "{",
     #         },
     #     },
@@ -193,7 +182,7 @@ class Dev(Configuration):
     },
     "formatters": {
         "verbose": {
-            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "format": "{levelname} {asctime} {name}.{funcName} {module} {process:d} {thread:d} {message}",
             "style": "{",
         },
     },
@@ -219,16 +208,25 @@ class Dev(Configuration):
     "root": {
         "handlers": ["console"],
         "level": "DEBUG",
-    },
-}
+        },
+    }
 
-PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    PASSWORD_HASHERS = [
+        'django.contrib.auth.hashers.Argon2PasswordHasher',
 
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-]
+        'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+        'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+        'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    ]
+    
+    CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
+        }
+    }
+
+
 class Prod(Dev):
     DEBUG = False
     SECRET_KEY = values.SecretValue()
