@@ -51,6 +51,8 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(),
          name='password_reset_done'),
+
+    path("api/v1/", include("blog.api_urls")),
 ]
 
 if settings.DEBUG:
