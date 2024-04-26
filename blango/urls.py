@@ -24,6 +24,9 @@ import blog.views
 from django_registration.backends.activation.views import RegistrationView
 from blango_auth.forms import BlangoRegistrationForm
 
+from django.contrib.auth import views as auth_views
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", blog.views.index),
@@ -31,6 +34,8 @@ urlpatterns = [
     path("ip/", blog.views.get_ip),
 
     path("accounts/", include("django.contrib.auth.urls")),
+        path("accounts/", include("allauth.urls")),
+
     path("accounts/profile/", blango_auth.views.profile, name="profile"),
     path(
         "accounts/register/",
@@ -38,7 +43,14 @@ urlpatterns = [
         name="django_registration_register",
     ),
     path("accounts/", include("django_registration.backends.activation.urls")),
-
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('password_reset/', auth_views.PasswordResetView.as_view(),
+         name='password_reset'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(),
+         name='password_reset_confirm'),
+    path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(),
+         name='password_reset_done'),
 ]
 
 if settings.DEBUG:
