@@ -30,11 +30,11 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", blog.views.index),
-    path("post/<slug>/", blog.views.post_detail, name="blog-post-detail"),
+    path("post/<str:slug>/", blog.views.post_detail, name="blog-post-detail"),
     path("ip/", blog.views.get_ip),
 
     path("accounts/", include("django.contrib.auth.urls")),
-        path("accounts/", include("allauth.urls")),
+    path("accounts/", include("allauth.urls")),
 
     path("accounts/profile/", blango_auth.views.profile, name="profile"),
     path(

@@ -1,0 +1,41 @@
+### GET all posts
+GET http://localhost:8000/api/v1/posts
+
+### GET a post by pk
+GET http://localhost:8000/api/v1/posts/7
+
+### POST a post - create post
+POST http://localhost:8000/api/v1/posts/
+Content-Type: application/json; charset=utf-8
+
+{
+"author_id": 1,
+"title": "A Post from VSCODE request.rest",
+"slug": "a-post-from-vscode-request-rest",
+"summary": "A New updated example post from VSCODE request.rest.",
+"content": "<h3>An example post!</h3>\r\n<p>This is an example post, that uses HTML to render itself</p>"
+}
+
+### PUT a post by pk - update post
+PUT http://localhost:8000/api/v1/posts/7/
+Content-Type: application/json; charset=utf-8
+
+{
+  "author_id": 1,
+  "title": "Updated Post from VSCODE request.rest",
+  "slug": "a-post-from-vscode-request-rest",
+  "summary": "A New updated example post from VSCODE request.rest.",
+  "content": "<h3>An example post!</h3>\r\n<p>This is an example post, that uses HTML to render itself</p>"
+}
+
+### PUT a post by pk - publish post
+PUT http://localhost:8000/api/v1/posts/7/
+Content-Type: application/json; charset=utf-8
+
+{
+      "published_at": "2024-04-27T00:09:20.340Z"
+}
+
+### Delete post by pk
+DELETE http://localhost:8000/api/v1/posts/6/
+Content-Type: application/json; charset=utf-8

@@ -16,11 +16,11 @@ from configurations import Configuration
 from configurations import values
 import dj_database_url
 
+
 class Dev(Configuration):
 
     # Build paths inside the project like this: BASE_DIR / 'subdir'.
     BASE_DIR = Path(__file__).resolve().parent.parent
-
 
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -32,10 +32,11 @@ class Dev(Configuration):
     DEBUG = values.BooleanValue(True)
 
     #   ALLOWED_HOSTS = ['*']
-    ALLOWED_HOSTS = values.ListValue(["localhost", "0.0.0.0", ".codio.io"])
-    X_FRAME_OPTIONS = 'ALLOW-FROM ' + os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io'
+    ALLOWED_HOSTS = values.ListValue(
+        ["127.0.0.1", "localhost", "0.0.0.0", ".codio.io"])
+    # X_FRAME_OPTIONS = 'ALLOW-FROM ' + os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io'
     CSRF_COOKIE_SAMESITE = None
-    CSRF_TRUSTED_ORIGINS = [os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io']
+    # CSRF_TRUSTED_ORIGINS = [os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io']
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SAMESITE = 'None'
@@ -49,22 +50,22 @@ class Dev(Configuration):
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.messages',
-      
+
         "django.contrib.sites",
 
         'django.contrib.staticfiles',
 
-        'blog','blango_auth',
+        'blog', 'blango_auth',
 
         'crispy_forms',
         'crispy_bootstrap5',
-        'debug_toolbar', 
+        'debug_toolbar',
         "allauth",
         "allauth.account",
         "allauth.socialaccount",
         "allauth.socialaccount.providers.google",
 
-               
+
     ]
 
     MIDDLEWARE = [
@@ -73,10 +74,11 @@ class Dev(Configuration):
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
-    #     'django.middleware.csrf.CsrfViewMiddleware',
+        #     'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
-    #     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        #     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'allauth.account.middleware.AccountMiddleware',
     ]
 
     ROOT_URLCONF = 'blango.urls'
@@ -99,7 +101,6 @@ class Dev(Configuration):
 
     WSGI_APPLICATION = 'blango.wsgi.application'
 
-
     # Database
     # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -116,7 +117,6 @@ class Dev(Configuration):
             default=f"sqlite:///{BASE_DIR}/alternative_db.sqlite3",
         ),
     }
-
 
     # Password validation
     # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -136,7 +136,6 @@ class Dev(Configuration):
         },
     ]
 
-
     # Internationalization
     # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -150,7 +149,6 @@ class Dev(Configuration):
 
     USE_TZ = True
 
-
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -162,7 +160,6 @@ class Dev(Configuration):
     DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
     CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
     CRISPY_TEMPLATE_PACK = "bootstrap5"
-
 
     # LOGGING = {
     #     "version": 1,
@@ -187,41 +184,41 @@ class Dev(Configuration):
     # }
 
     LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "filters": {
-        "require_debug_false": {
-            "()": "django.utils.log.RequireDebugFalse",
+        "version": 1,
+        "disable_existing_loggers": False,
+        "filters": {
+            "require_debug_false": {
+                "()": "django.utils.log.RequireDebugFalse",
+            },
         },
-    },
-    "formatters": {
-        "verbose": {
-            "format": "{levelname} {asctime} {name}.{funcName} {module} {process:d} {thread:d} {message}",
-            "style": "{",
+        "formatters": {
+            "verbose": {
+                "format": "{levelname} {asctime} {name}.{funcName} {module} {process:d} {thread:d} {message}",
+                "style": "{",
+            },
         },
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "stream": "ext://sys.stdout",
-            "formatter": "verbose",
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",
+                "formatter": "verbose",
+            },
+            "mail_admins": {
+                "level": "ERROR",
+                "class": "django.utils.log.AdminEmailHandler",
+                "filters": ["require_debug_false"],
+            },
         },
-        "mail_admins": {
-            "level": "ERROR",
-            "class": "django.utils.log.AdminEmailHandler",
-            "filters": ["require_debug_false"],
+        "loggers": {
+            "django.request": {
+                "handlers": ["mail_admins"],
+                "level": "ERROR",
+                "propagate": True,
+            },
         },
-    },
-    "loggers": {
-        "django.request": {
-            "handlers": ["mail_admins"],
-            "level": "ERROR",
-            "propagate": True,
-        },
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": "DEBUG",
+        "root": {
+            "handlers": ["console"],
+            "level": "DEBUG",
         },
     }
 
@@ -232,25 +229,27 @@ class Dev(Configuration):
         'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
         'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
     ]
-    
+
     CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "unique-snowflake",
         }
     }
-    
+
     INTERNAL_IPS = ["192.168.11.179"]
     AUTH_USER_MODEL = "blango_auth.User"
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-    ACCOUNT_ACTIVATION_DAYS = 7  
-
+    ACCOUNT_ACTIVATION_DAYS = 7
 
     SITE_ID = 1
     ACCOUNT_USER_MODEL_USERNAME_FIELD = None
     ACCOUNT_EMAIL_REQUIRED = True
     ACCOUNT_USERNAME_REQUIRED = False
     ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+    # APPEND_SLASH = False
+
 
 class Prod(Dev):
     DEBUG = False
